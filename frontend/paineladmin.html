@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Painel do Administrador</title>
+</head>
+<body>
+  <h2>Área Administrativa</h2>
+  <p id="mensagem" style="color: red;"></p>
+  <main id="conteudo"></main>
+  <button id="logoutBtn" style="margin-top: 20px;">Sair</button>
+
+  <script>
+    const token = localStorage.getItem("adminToken");
+    const mensagemElem = document.getElementById("mensagem");
+    const conteudoElem = document.getElementById("conteudo");
+
+    if (!token) {
+      mensagemElem.textContent = "Acesso negado. Faça login como administrador.";
+      setTimeout(() => {
+        window.location.href = "admin.html";
+      }, 1500);
+    } else {
+      carregarReclamacoesPendentes();
+    }
+
+    function carregarReclamacoesPendentes() {
+      fetch("http://localhost:3000/api/reclamacoes/pendentes", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(async (res) => {
+        if (res.ok) {
+          const dados = await res.json();
+
+          if (dados.length === 0) {
+            conteudoElem.innerHTML = "<p>Nenhuma reclamação pendente.</p>";
+          } else {
+            conteudoElem.innerHTML = "<h3>Reclamações Pendentes:</h3>" +
+              dados.map(r => {
+                const dataFormatada = new Date(r.dataEnvio).toLocaleString('pt-BR');
+                return `
+                  <section style="border:1px solid #ccc; padding:10px; margin:10px;">
+                    <p><strong>Consumidor:</strong> ${r.username}</p>
+                    <p><strong>Email:</strong> ${r.email}</p>
+                    <p><strong>Descrição:</strong> ${r.mensagem}</p>
+                    <p><small>Enviado em: ${dataFormatada}</small></p>
+                    <button onclick="aprovarReclamacao('${r._id}')">Aprovar</button>
+                    <button onclick="excluirReclamacao('${r._id}')">Excluir</button>
+                  </section>
+                `;
+              }).join("");
+          }
+        } else {
+          mensagemElem.textContent = "Acesso não autorizado.";
+          localStorage.removeItem("adminToken");
+          setTimeout(() => {
+            window.location.href = "admin.html";
+          }, 1500);
+        }
+      })
+      .catch(() => {
+        mensagemElem.textContent = "Erro ao conectar com o servidor.";
+      });
+    }
+
+    function aprovarReclamacao(id) {
+      fetch(`http://localhost:3000/api/reclamacoes/aprovar/${id}`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then(res => {
+        if (res.ok) {
+          mensagemElem.style.color = "green";
+          mensagemElem.textContent = "Reclamação aprovada com sucesso.";
+          carregarReclamacoesPendentes();
+        } else {
+          mensagemElem.style.color = "red";
+          mensagemElem.textContent = "Erro ao aprovar reclamação.";
+        }
+      })
+      .catch(() => {
+        mensagemElem.style.color = "red";
+        mensagemElem.textContent = "Erro na conexão com o servidor.";
+      });
+    }
+
+    function excluirReclamacao(id) {
+      fetch(`http://localhost:3000/api/reclamacoes/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(res => {
+        if (res.ok) {
+          mensagemElem.style.color = "green";
+          mensagemElem.textContent = "Reclamação excluída com sucesso.";
+          carregarReclamacoesPendentes();
+        } else {
+          mensagemElem.style.color = "red";
+          mensagemElem.textContent = "Erro ao excluir reclamação.";
+        }
+      })
+      .catch(() => {
+        mensagemElem.style.color = "red";
+        mensagemElem.textContent = "Erro na conexão com o servidor.";
+      });
+    }
+
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      localStorage.removeItem("adminToken");
+      window.location.href = "admin.html";
+    });
+  </script>
+</body>
+</html>

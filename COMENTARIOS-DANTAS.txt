@@ -1,0 +1,37 @@
+Instruções:
+
+se certificar de que o computador tem o programa NODE.JS instalado, se não tiver ir no 
+site https://nodejs.org/en/download e baixar e instalar, em seguida seguir os passos abaixo:
+
+
+
+Quando for usar esse projeto pela primeira vez, abrir o terminal 
+do vs code  como Command Prompt e digitar os codigos abaixo para instalar 
+frameworks necessários para rodar a aplicação e a pasta node_modules, 
+pois ela é muito pesada para subir para o Github.
+
+
+o que instalar para rodar essa aplicação:
+
+npm init -y
+npm install express nodemon mongoose mongodb cors axios body-parser
+npm install dotenv
+npm install bcrypt
+npm install jsonwebtoken
+
+
+
+comando para iniciar o servidor:
+
+node server.js   
+
+
+o projeto está vinculado ao meu mongodb
+
+o login para usar na pagina principal index.html para acessar a pagina de moderador é:
+
+usuario: dantas
+senha: senac
+
+Dantas 18/05
+

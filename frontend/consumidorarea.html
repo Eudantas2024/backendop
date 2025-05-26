@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Área Exclusiva do Consumidor</title>
+</head>
+<body>
+  <h2>Bem-vindo à sua área exclusiva!</h2>
+  <p id="infoUsuario">Carregando informações...</p>
+  <button id="logout">Sair</button>
+
+  <hr />
+
+  <h3>Nova Reclamação</h3>
+  <form id="formReclamacao">
+    <textarea name="mensagem" rows="4" cols="50" placeholder="Descreva sua reclamação" required></textarea><br />
+    <button type="submit">Enviar</button>
+  </form>
+  <p id="mensagemEnvio"></p>
+
+  <hr />
+
+  <h3>Minhas Reclamações</h3>
+  <ul id="listaReclamacoes"></ul>
+
+  <script>
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      window.location.href = "consumidorlogin.html";
+    }
+
+    async function carregarPerfil() {
+      try {
+        const res = await fetch("http://localhost:3000/consumidor/perfil", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (res.ok) {
+          const dados = await res.json();
+          document.getElementById("infoUsuario").textContent = `Olá, ${dados.username}!`;
+        } else {
+          localStorage.removeItem("token");
+          window.location.href = "consumidorlogin.html";
+        }
+      } catch (error) {
+        document.getElementById("infoUsuario").textContent = "Erro ao carregar dados.";
+      }
+    }
+
+    async function carregarReclamacoes() {
+      try {
+        const res = await fetch("http://localhost:3000/api/reclamacoes/minhas", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const reclamacoes = await res.json();
+        const lista = document.getElementById("listaReclamacoes");
+        lista.innerHTML = "";
+
+        if (Array.isArray(reclamacoes)) {
+          reclamacoes.forEach((rec) => {
+            const li = document.createElement("li");
+            li.textContent = `${new Date(rec.dataEnvio).toLocaleString()} - ${rec.mensagem}`;
+            lista.appendChild(li);
+          });
+        }
+      } catch (error) {
+        console.error("Erro ao carregar reclamações:", error);
+      }
+    }
+
+    document.getElementById("logout").addEventListener("click", () => {
+      localStorage.removeItem("token");
+      window.location.href = "consumidorlogin.html";
+    });
+
+    document.getElementById("formReclamacao").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const mensagem = e.target.mensagem.value;
+
+      try {
+        const res = await fetch("http://localhost:3000/api/reclamacoes", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ mensagem }),
+        });
+
+        const result = await res.json();
+        const msg = document.getElementById("mensagemEnvio");
+
+        if (res.ok) {
+          msg.textContent = result.message;
+          msg.style.color = "green";
+          e.target.reset();
+          carregarReclamacoes(); // recarrega lista
+        } else {
+          msg.textContent = result.error || "Erro ao enviar reclamação.";
+          msg.style.color = "red";
+        }
+      } catch (error) {
+        document.getElementById("mensagemEnvio").textContent = "Erro ao conectar com o servidor.";
+      }
+    });
+
+    carregarPerfil();
+    carregarReclamacoes();
+  </script>
+</body>
+</html>

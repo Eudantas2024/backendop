@@ -1,0 +1,57 @@
+<!-- Essa é a Página do Moderador que controla o site -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Últimas Reclamações</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body id="restrictedContent">
+    <div class="container">
+        <h1>MODERADOR</h1>
+        <br><br>
+        <p>Área restrita - apenas para usuários autenticados.</p>
+        <br>
+        <a href="formreg.html">Página de cadastro de moderadores</a>
+        <br><br>
+     
+        <p>Não esqueça de fazer logout clicando em 'SAIR' quando terminar</p>
+        <br>
+        <button onclick="logout()">SAIR</button>
+        <br>
+        <!-- Mensagem temporária de logout -->
+        <div id="logoutMessage">✅ Logout realizado com sucesso!</div>
+        <br>
+        <h2>Últimas Reclamações</h2>
+        <br>
+        <div id="listaReclamacoes"></div>
+    </div>
+
+    <!-- Formulário de edição (inicialmente oculto) -->
+    <div id="editarForm" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="fecharFormulario()">&times;</span>
+            <h2>Editar Reclamação</h2>
+            <input type="text" id="editNome" placeholder="Nome">
+            <input type="email" id="editEmail" placeholder="Email">
+            <input type="text" id="editEmpresa" placeholder="Empresa Reclamada">
+            <input type="text" id="editLogradouro" placeholder="Rua">
+            <input type="text" id="editNumero" placeholder="Número">
+            <input type="text" id="editBairro" placeholder="Bairro">
+            <input type="text" id="editComplemento" placeholder="Complemento">
+            <input type="text" id="editCidade" placeholder="Cidade">
+            <input type="text" id="editUf" placeholder="UF">
+            <textarea id="editComentario" placeholder="Comentário"></textarea>
+            <button id="salvarEdicao">Salvar</button>
+            <button onclick="fecharFormulario()">Cancelar</button>
+        </div>
+    </div>
+
+    <script src="js/conteudo.js"></script>
+    <script src="js/moderador.js"></script>
+</body>
+
+</html>

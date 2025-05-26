@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login do Consumidor</title>
+</head>
+<body>
+  <h2>Login do Consumidor</h2>
+  <form id="formLogin">
+    <input type="email" name="email" placeholder="E-mail" required /><br />
+    <input type="password" name="senha" placeholder="Senha" required /><br />
+    <button type="submit">Entrar</button>
+  </form>
+
+  <p id="mensagemLogin"></p>
+
+  <script>
+    const form = document.getElementById("formLogin");
+    const mensagem = document.getElementById("mensagemLogin");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const dados = {
+        email: form.email.value,
+        senha: form.senha.value,
+      };
+
+      try {
+        const resposta = await fetch("http://localhost:3000/consumidor/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(dados),
+        });
+
+        const resultado = await resposta.json();
+
+        if (resposta.ok) {
+          // Salva o token JWT no localStorage
+          localStorage.setItem("token", resultado.token);
+          mensagem.textContent = "Login realizado com sucesso!";
+          mensagem.style.color = "green";
+          form.reset();
+
+          // Redireciona para a área exclusiva do consumidor
+          window.location.href = "consumidorarea.html";
+        } else {
+          mensagem.textContent = resultado.error || "Erro no login.";
+          mensagem.style.color = "red";
+        }
+      } catch (error) {
+        mensagem.textContent = "Erro na conexão com o servidor.";
+        mensagem.style.color = "red";
+      }
+    });
+  </script>
+</body>
+</html>

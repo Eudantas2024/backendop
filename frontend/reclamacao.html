@@ -1,0 +1,52 @@
+<!-- Essa é a página onde o consumidor vai registrar a reclamação -->
+
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registrar Opinião</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <div class="container">
+        <h2>Registre sua Opinião</h2>
+        <form onsubmit="cadastrarConsumidor(event)">
+            <div class="form-group">
+                <input type="text" id="nome" placeholder="Nome completo" required />
+                <input type="email" id="email" placeholder="E-mail" required />
+            </div>
+
+            <h3>Endereço</h3>
+            <div class="form-group">
+                <input type="text" id="cep" placeholder="CEP" maxlength="8" oninput="buscarCEP()" required />
+                <input type="text" id="logradouro" placeholder="Logradouro" readonly />
+            </div>
+            <div class="form-group">
+                <input type="text" id="numero" placeholder="Nº" />
+                <input type="text" id="complemento" placeholder="Complemento" />
+                <input type="text" id="bairro" placeholder="Bairro" readonly />
+            </div>
+            <div class="form-group">
+                <input type="text" id="cidade" placeholder="Cidade" readonly />
+                <input type="text" id="uf" placeholder="UF" readonly />
+            </div>
+
+            <h3>Reclamação</h3>
+            <div class="form-group">
+                <input type="text" id="empresa" placeholder="Nome da Empresa" required />
+                <textarea id="comentario" placeholder="Digite sua reclamação" required></textarea>
+            </div>
+
+            <button type="submit">Enviar Reclamação</button>
+        </form>
+
+        <div id="resultado" class="mensagem"></div>
+
+        <a href="index.html">Voltar para Início</a>
+    </div>
+
+    <script src="js/reclamacao.js"></script>
+</body>
+</html>

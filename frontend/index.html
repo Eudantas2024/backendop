@@ -1,0 +1,48 @@
+<!-- Essa é a página pública que vai ser acessada por todo mundo  -->
+
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Últimas Reclamações</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+    <div class="container">
+        <form id="loginForm">
+            <h4>Login Administrativo</h4>
+            <input class="logincampo" type="text" id="username" placeholder="Usuário" required />
+            <input class="logincampo" type="password" id="password" placeholder="Senha" required />
+            <button type="submit">Entrar</button>
+        </form>
+        <br>
+        <br>
+
+        <h1>PÁGINA DE ACESSO PÚBLICO</h1>
+        <br>
+        <a href="reclamacao.html">Faça sua Reclamação Aqui</a>
+        <br>
+        <br>
+        <br>
+
+
+        <div id="loginMessage"></div>
+
+
+
+        <!-- <a href="moderador.html">Ir para MODERADOR</a> -->
+        <br><br>
+        <h2>Últimas Reclamações</h2>
+        <br>
+        <div id="listaReclamacoes"></div>
+
+    </div>
+    <script src="js/publico.js"></script>
+    <script src="js/login.js"></script>
+</body>
+
+</html>
