@@ -50,7 +50,7 @@ router.post("/", autenticarToken, async (req, res) => {
         .status(400)
         .json({ error: "Mensagem inválida ou muito curta." });
 
-    const tiposValidos = ["sugestao", "problema", "elogio", "duvida", "outros"];
+    const tiposValidos = ["sugestao", "problema", "elogio", "dúvida", "outros"];
     if (!tipoFeedback || !tiposValidos.includes(tipoFeedback))
       return res.status(400).json({ error: "Tipo de feedback inválido." });
 
@@ -196,11 +196,13 @@ router.get("/aprovadas", async (req, res) => {
 // Excluir reclamação (admin)
 router.delete("/:id", autenticarAdmin, async (req, res) => {
   try {
-    const reclamacao = await Reclamacao.findByIdAndDelete(req.params.id);
+    const reclamacao = await Reclamacao.findById(req.params.id);
 
     if (!reclamacao) {
       return res.status(404).json({ error: "Reclamação não encontrada." });
     }
+
+    await Reclamacao.findByIdAndDelete(req.params.id);
 
     res.json({ message: "Reclamação excluída com sucesso." });
   } catch (error) {
@@ -208,5 +210,6 @@ router.delete("/:id", autenticarAdmin, async (req, res) => {
     res.status(500).json({ error: "Erro ao excluir reclamação." });
   }
 });
+
 
 module.exports = router;
