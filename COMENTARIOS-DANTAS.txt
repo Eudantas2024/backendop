@@ -36,3 +36,21 @@ senha: senac
 Dantas 18/05
 
 00v3diJm4XCmAyEX
+
+
+
+localhos:3000/auth/register
+
+
+Hospedagem -> Controller/auth
+
+
+SERVER  HOSPEDAGEM/LOGIN === Rota de inicio
+  
+
+ROUTER   ---> Post, get, put ----> Controller
+
+Controler === POST, GET
+  
+
+
